@@ -1,0 +1,42 @@
+services:
+  sentinel-trap:
+    build: .
+    container_name: sentinel-trap
+    restart: always
+    depends_on:
+      - mongo
+      - mailhog
+    ports:
+      - "2222:2222"
+      - "18080:8080"
+      - "8081:8081"
+      - "21:21"
+      - "23:23"
+      - "3306:3306"
+      - "6379:6379"
+    volumes:
+      - ./logs:/root/logs
+      - ./configs:/root/configs
+    environment:
+      - TZ=Europe/Istanbul
+      - STORAGE_TYPE=sqlite
+      - MONGO_URI=mongodb://mongo:27017
+
+  mongo:
+    image: mongo:7
+    container_name: sentinel-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: sentinel-mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  mongo_data:

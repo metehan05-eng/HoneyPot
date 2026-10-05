@@ -1,0 +1,45 @@
+server:
+  name: "Sentinel-Trap-Node-01"
+
+services:
+  ssh:
+    enabled: true
+    port: ":2222"
+  http:
+    enabled: true
+    port: ":8080"
+  dashboard:
+    enabled: true
+    port: ":8081"
+  raw_tcp:
+    enabled: true
+    ports: [":21", ":23", ":3306", ":6379"]
+
+logging:
+  file_path: "logs/honeypot.json"
+
+storage:
+  enabled: true
+  type: "sqlite"
+  sqlite_path: "logs/honeypot.db"
+  mongo_uri: "mongodb://mongo:27017"
+  mongo_db: "honeypot"
+  mongo_table: "honeypot_events"
+
+analysis:
+  threshold: 5
+  window_sec: 300
+  block_minutes: 60
+
+notifier:
+  telegram_enabled: false
+  bot_token: "YOUR_BOT_TOKEN"
+  chat_id: "YOUR_CHAT_ID"
+  email:
+    enabled: false
+    host: "mailhog"
+    port: 1025
+    username: ""
+    password: ""
+    from: "honeypot@local"
+    to: ["admin@example.com"]
